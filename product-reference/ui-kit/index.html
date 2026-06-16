@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tatudin · UI kit</title>
+  <link rel="stylesheet" href="../../colors_and_type.css">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(1100px 600px at 70% 10%, #E5E2F0 0%, transparent 60%),
+        radial-gradient(900px 700px at 10% 80%, #F2F0F8 0%, transparent 70%),
+        #FAF9FC;
+      font-family: var(--font-ui);
+      color: var(--azul-700);
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 40px 24px 80px;
+      gap: 36px;
+    }
+    .stage {
+      display: flex; gap: 32px; align-items: flex-start;
+      flex-wrap: wrap; justify-content: center;
+    }
+    .device-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .device-wrap .caption {
+      font-size: 11px; color: var(--fg-3);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      font-weight: 600;
+    }
+    /* sheet animation */
+    @keyframes tatudin-sheet-in {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* segmented nav above the device */
+    .seg {
+      display: inline-flex; padding: 4px; gap: 4px;
+      background: #fff; border-radius: 999px;
+      box-shadow: 0 1px 2px rgba(34,28,53,0.06), 0 1px 1px rgba(34,28,53,0.04);
+      margin-bottom: 8px;
+    }
+    .seg button {
+      padding: 8px 14px; font-size: 12px; font-weight: 600;
+      border: none; background: transparent; border-radius: 999px;
+      cursor: pointer; color: var(--azul-500);
+      font-family: var(--font-ui);
+      transition: all 200ms cubic-bezier(0.22,1,0.36,1);
+    }
+    .seg button.active { background: var(--azul-700); color: #fff; }
+
+    .header {
+      width: 100%; max-width: 980px; margin: 0 auto 8px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .header .brand-row { display: flex; align-items: center; gap: 12px; }
+    .header img { width: 38px; height: 38px; }
+    .header .word { font-family: var(--font-brand); font-size: 36px; color: var(--azul-700); line-height: 1; }
+    .header .sub { color: var(--fg-2); font-size: 13px; }
+
+    .scroll-area { height: 874px; overflow: auto; }
+    .scroll-area::-webkit-scrollbar { width: 0; }
+  </style>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div style="width: 100%;">
+    <div class="header">
+      <div class="brand-row">
+        <img src="../../assets/espiral-azul.png" alt="">
+        <div>
+          <div class="word">tatudin</div>
+          <div class="sub">UI kit · mobile · pixel-recreated from product screenshots</div>
+        </div>
+      </div>
+      <div style="text-align:right; font-size: 12px; color: var(--fg-3); max-width: 320px;">
+        <b style="color: var(--azul-700);">Claridad operativa</b><br/>
+        para una mente creativa.
+      </div>
+    </div>
+
+    <div id="root"></div>
+  </div>
+
+  <script type="text/babel" src="ios-frame.jsx"></script>
+  <script type="text/babel" src="components.jsx"></script>
+  <script type="text/babel" src="AgendaScreen.jsx"></script>
+  <script type="text/babel" src="FinanzasScreen.jsx"></script>
+  <script type="text/babel" src="IntegracionesScreen.jsx"></script>
+  <script type="text/babel" src="RescheduleScreen.jsx"></script>
+  <script type="text/babel" src="RolePickerScreen.jsx"></script>
+  <script type="text/babel" src="FilterCalendarSheet.jsx"></script>
+
+  <script type="text/babel">
+    function App() {
+      const [screen, setScreen] = React.useState('agenda');
+      const [tab, setTab] = React.useState('agenda');
+      const [filterOpen, setFilterOpen] = React.useState(false);
+
+      const tabs = [
+        { id: 'role',          label: 'Onboarding' },
+        { id: 'agenda',        label: 'Agenda' },
+        { id: 'finanzas',      label: 'Finanzas' },
+        { id: 'integraciones', label: 'Integraciones' },
+        { id: 'reschedule',    label: 'Reschedule' },
+      ];
+
+      const go = (id) => {
+        setScreen(id);
+        if (id === 'agenda') setTab('agenda');
+        if (id === 'finanzas') setTab('finanzas');
+        if (id === 'integraciones') setTab('menu');
+      };
+
+      const screenContent = (() => {
+        switch (screen) {
+          case 'role':          return <RolePickerScreen onClose={() => go('agenda')} onContinue={() => go('agenda')}/>;
+          case 'agenda':        return <AgendaScreen onOpenFilter={() => setFilterOpen(true)} onOpenReschedule={() => go('reschedule')}/>;
+          case 'finanzas':      return <FinanzasScreen/>;
+          case 'integraciones': return <IntegracionesScreen onBack={() => go('agenda')}/>;
+          case 'reschedule':    return <RescheduleScreen onBack={() => go('agenda')} onConfirm={() => go('agenda')}/>;
+          default:              return <AgendaScreen onOpenFilter={() => setFilterOpen(true)}/>;
+        }
+      })();
+
+      const showTabBar = ['agenda','finanzas'].includes(screen);
+
+      return (
+        <div className="stage">
+          <div className="device-wrap">
+            <div className="seg">
+              {tabs.map(t => (
+                <button key={t.id} className={screen === t.id ? 'active' : ''} onClick={() => go(t.id)}>{t.label}</button>
+              ))}
+            </div>
+            <IOSDevice width={402} height={874}>
+              <div style={{position:'relative', height:'100%', display:'flex', flexDirection:'column'}}>
+                {/* status-bar safe area */}
+                <div style={{ height: 54, flexShrink: 0 }}/>
+                <div style={{ flex: 1, overflow: 'auto', position: 'relative' }}>
+                  {screenContent}
+                  <FilterCalendarSheet
+                    open={filterOpen}
+                    onClose={() => setFilterOpen(false)}
+                    onApply={() => setFilterOpen(false)}
+                  />
+                </div>
+                {showTabBar && (
+                  <div style={{ flexShrink: 0 }}>
+                    <BottomTabBar active={tab} onChange={(id) => {
+                      setTab(id);
+                      if (id === 'finanzas') setScreen('finanzas');
+                      else if (id === 'agenda') setScreen('agenda');
+                      else if (id === 'menu') setScreen('integraciones');
+                    }}/>
+                    {/* home-indicator safe area */}
+                    <div style={{ height: 24, background: '#fff' }}/>
+                  </div>
+                )}
+              </div>
+            </IOSDevice>
+            <div className="caption">tap segmented nav above · open Filter from agenda · tap dark appointment to reschedule</div>
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App/>);
+  </script>
+</body>
+</html>
