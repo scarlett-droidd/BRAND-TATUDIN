@@ -91,10 +91,26 @@ Three colors do all the work. Restraint is the system.
 Backgrounds are almost always solid lavender or white. **No gradients** as decoration. The only "gradient" you'll see is the deep-blue Finanzas balance card, which uses azul-700 → azul-900 to add weight to the headline figure.
 
 ### Type
-- **UI:** Plus Jakarta Sans (substitute for the unbranded system sans seen in the screenshots — clean humanist sans, friendly without being playful). **Weights:** 400 / 500 / 600 / 700. The product uses 600–700 for headers, 400–500 for body, 600 for buttons and chips.
-- **Brand display:** Caveat Brush (substitute for the custom hand-brushed wordmark in `uploads/azul.png`). Use *only* for the wordmark itself or for one accent word in hero compositions. **Never set body or buttons in the brand font.**
-- **⚠️ Font substitution flag:** the real wordmark is a custom hand-brushed marker letterform — no font file was provided. Caveat Brush is the closest free match. If a brand font file exists, swap it in `fonts/` and update `--font-brand`.
-- **Numerals:** tabular for currency, dates, and times (Finanzas, calendar grids).
+
+Two families. Four roles. One rule: restraint.
+
+- **UI — Plus Jakarta Sans** — weights 400/500/600/700/800. Does all functional work: body, headings, buttons, labels, captions, nav. The product uses 600–700 for headers, 400–500 for body, 600 for buttons and chips.
+- **Brand accent — Caveat Brush** — use *only* for the wordmark or 1–2 accent words inside a hero headline. **Never set body, buttons, or any repeated UI element in the brand font.**
+- **Mono** — system stack (JetBrains Mono fallback). Code snippets only — not active in current product surfaces.
+- **Numerals:** tabular (`font-variant-numeric: tabular-nums`) for all currency, dates, and times.
+
+**The four typographic roles in the landing — quick reference:**
+
+| Role | Family | Weight | Size | Letter-spacing | Use |
+|---|---|---|---|---|---|
+| Display | Plus Jakarta Sans | 800 | `clamp(40px, 7vw, 96px)` | `-0.035em` | Hero headlines only |
+| Brand accent | Caveat Brush | 400 | Matches surrounding display | `0` | 1–2 words per headline, wordmark |
+| Eyebrow | Plus Jakarta Sans | 600 | `12px` uppercase | `+0.10em` | Section labels |
+| Functional | Plus Jakarta Sans | 400–700 | 11–40px | `-0.02em` to `0` | Everything else |
+
+> **Full typography documentation** — sizes, tokens, hierarchy diagram, technical debt, and do/don't rules: see [`TYPOGRAPHY.md`](./TYPOGRAPHY.md).
+>
+> **⚠️ Font substitution note:** The hand-brushed *tatudin* wordmark is a custom letterform — no font file was provided. Caveat Brush is the closest free match. If the original file exists, drop it in `fonts/` and update `--font-brand` in `colors_and_type.css`.
 
 ### Layout & spacing
 - **4-pt grid.** All spacing tokens (`--s-1` … `--s-16`) are multiples of 4.
@@ -178,30 +194,31 @@ Product UI uses a **light-stroke outline icon family** — 1.5–2 px strokes, r
 
 ---
 
-## Index — what's in this folder
+## Index — what's in this repo
 
 | Path | Purpose |
 |---|---|
-| `README.md` | This file. Brand, content, visual foundations, iconography. |
-| `DESIGN.md` | Quick-reference design tokens — colors, type, spacing, rules. Use this to brief Claude/tools without re-pasting the full guide. |
-| `SKILL.md` | Agent skill manifest — entry point when this folder is loaded as a skill. |
-| `colors_and_type.css` | Tokens: color scales, semantic vars, type ramp, spacing, radii, shadows, motion. |
+| `README.md` | This file. Brand overview, content fundamentals, visual foundations, iconography. |
+| `DESIGN.md` | Quick-reference design tokens — colors, type scale, spacing, hard rules. Use this to brief Claude/tools without repasting the full guide. |
+| `TYPOGRAPHY.md` | **Full typography system documentation** — the four roles, complete token reference, hierarchy diagram, implementation notes, technical debt in `Landing.html`, and do/don't rules. |
+| `SKILL.md` | Agent skill manifest — entry point when this folder is loaded as a Claude skill. |
+| `colors_and_type.css` | Source of truth in code: color scales, semantic vars, type ramp, spacing, radii, shadows, motion. |
+| `Landing.html` | Current marketing landing page, built on these tokens. |
 | `assets/` | Logos, spiral marks, face marks, mascot illustrations. |
 | `docs/` | Source brand brief (`Brief_de_Marca_Tatudin.docx`). |
-| `Landing.html` | Current marketing landing page, built on these tokens. |
-| `fonts/` | (empty) — Plus Jakarta Sans + Caveat Brush load from Google Fonts via `colors_and_type.css`. Drop custom brand-font files here when available. |
-| `preview/` | Design-system cards (rendered in the Design System tab). Split by Type / Colors / Spacing / Components / Brand. |
+| `fonts/` | Empty — Plus Jakarta Sans + Caveat Brush load from Google Fonts. Drop custom brand-font files here when available. |
+| `preview/` | Design-system cards rendered as standalone HTML. Split by Type / Colors / Spacing / Components / Brand. |
 | `ui_kits/tatudin/` | Click-thru recreation of the mobile product. See its own README. |
-
-Slides are intentionally **not** included — no slide templates were provided in the uploads.
+| `RESEARCH.md` | User research — survey analysis, buyer personas, 8 communication angles for the launch. |
 
 ---
 
 ## Caveats & open questions
 
-1. **No codebase, no Figma.** Everything was recreated from 7 screenshots + the brand brief. Component fidelity is screenshot-level, not code-level. Re-attach a repo or Figma link to upgrade.
-2. **Custom brand font missing.** The hand-brushed *tatudin* wordmark isn't a public font — I'm substituting **Caveat Brush** from Google Fonts. Ship the real font file and drop it in `fonts/` to replace.
-3. **Icon set not shipped.** Using **Lucide** as the closest CDN match. Export your product icon set to replace.
-4. **Spanish/English copy mix in current build.** Screenshots show some untranslated English in the role-picker. Treat new work as Spanish-first.
+1. **No codebase, no Figma.** Everything was recreated from screenshots + the brand brief. Component fidelity is screenshot-level, not code-level. Re-attach a repo or Figma link to upgrade.
+2. **Custom brand font missing.** The hand-brushed *tatudin* wordmark isn't a public font — substituting **Caveat Brush** from Google Fonts. Ship the real font file and drop it in `fonts/` to replace. See `TYPOGRAPHY.md` for constraints while the substitution is active.
+3. **Hardcoded font sizes in `Landing.html`.** Several `h2` elements override the token system with inline `font-size` styles. This is documented as technical debt in `TYPOGRAPHY.md` with a recommended fix.
+4. **Icon set not shipped.** Using **Lucide** as the closest CDN match. Export your product icon set to replace.
+5. **Spanish/English copy mix in current build.** Screenshots show some untranslated English in the role-picker. Treat new work as Spanish-first.
 
 > Resolved: the `muñeco` mascot illustrations are now in `assets/` as `muneco-azul.png`, `muneco-gris.png`, `muneco-fondo-azul.png`, and `muneco-fondo-gris.png`.
